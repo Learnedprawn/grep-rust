@@ -29,11 +29,9 @@ fn match_pattern(input_line: &str, pattern: &str) -> bool {
             == '^'
         {
             println!("We are inside the negative group");
-
             let inner = pattern.trim_start_matches("[^").trim_end_matches(']');
             println!("Inner: {}", inner);
             input_line.chars().any(|c| !inner.contains(c))
-            // inner.chars().all(|c| )
         } else {
             let inner = pattern.trim_start_matches('[').trim_end_matches(']');
             inner.chars().any(|c| input_line.contains(c))
