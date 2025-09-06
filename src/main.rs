@@ -29,6 +29,9 @@ fn match_pattern(input_line: &str, pattern: &str) -> bool {
             == '^'
         {
             let inner = pattern.trim_start_matches("[^").trim_end_matches(']');
+            input_line.chars().any(|c| !inner.contains(c));
+            // inner.chars().all(|c| )
+
             return true;
         } else {
             let inner = pattern.trim_start_matches('[').trim_end_matches(']');
