@@ -5,6 +5,8 @@ use std::process;
 fn match_pattern(input_line: &str, pattern: &str) -> bool {
     if pattern.chars().count() == 1 {
         return input_line.contains(pattern);
+    } else if pattern == "/d" {
+        return input_line.chars().any(|c| c.is_ascii_digit());
     } else {
         panic!("Unhandled pattern: {}", pattern)
     }
@@ -19,6 +21,7 @@ fn main() {
         println!("Expected first argument to be '-E'");
         process::exit(1);
     }
+    eprintln!("-E check passed");
 
     let pattern = env::args().nth(2).unwrap();
     let mut input_line = String::new();
@@ -27,8 +30,10 @@ fn main() {
 
     // Uncomment this block to pass the first stage
     if match_pattern(&input_line, &pattern) {
+        eprintln!("Match Pattern Called: process::exit(0)");
         process::exit(0)
     } else {
+        eprintln!("Match Pattern Called: process::exit(1)");
         process::exit(1)
     }
 }
