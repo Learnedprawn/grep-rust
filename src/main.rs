@@ -21,6 +21,27 @@ fn match_pattern(input_line: &str, pattern: &str) -> bool {
         input_line
             .chars()
             .any(|c| c.is_alphanumeric_and_underscore())
+    } else if pattern
+        .chars()
+        .nth(0)
+        .expect("pattern is not left square bracket")
+        == '['
+    // && pattern
+    //     .chars()
+    //     .last()
+    //     .expect("pattern is not right square bracket")
+    //     == ']'
+    {
+        // let pattern_without_brackets = pattern[1..( pattern.len()-1 )];
+        // input_line.chars().any(|c| c.)
+        let mut pattern_iter = pattern.chars();
+        assert_eq!(pattern_iter.next().unwrap(), '[');
+        for character in pattern_iter {
+            if input_line.contains(character) {
+                return true;
+            }
+        }
+        false
     } else {
         panic!("Unhandled pattern: {}", pattern)
     }
