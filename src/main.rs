@@ -22,11 +22,18 @@ fn match_pattern(input_line: &str, pattern: &str) -> bool {
             .chars()
             .any(|c| c.is_alphanumeric_and_underscore())
     } else if pattern.starts_with('[') {
-        let inner = pattern
-            .strip_prefix('[')
-            .and_then(|prefixless| prefixless.strip_suffix(']'))
-            .expect("Stripping brackets caused an issue");
-        inner.chars().any(|c| input_line.contains(c))
+        if pattern
+            .chars()
+            .nth(1)
+            .expect("Char at index 1 error while parsing ^")
+            == '^'
+        {
+            let inner = pattern.trim_start_matches("[^").trim_end_matches(']');
+            return true;
+        } else {
+            let inner = pattern.trim_start_matches('[').trim_end_matches(']');
+            inner.chars().any(|c| input_line.contains(c))
+        }
     } else {
         panic!("Unhandled pattern: {}", pattern)
     }
