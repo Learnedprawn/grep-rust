@@ -41,12 +41,13 @@ fn match_pattern(input_line: &str, pattern: &str) -> bool {
         // let inner = &pattern[1..pattern.len() - 1];
         // let mut pattern_iter = pattern.chars();
         // assert_eq!(pattern_iter.next().unwrap(), '[');
-        for character in inner.chars() {
-            if input_line.contains(character) {
-                return true;
-            }
-        }
-        false
+        // for character in inner.chars() {
+        //     if input_line.contains(character) {
+        //         return true;
+        //     }
+        // }
+        // false
+        inner.chars().any(|c| input_line.contains(c))
     } else {
         panic!("Unhandled pattern: {}", pattern)
     }
