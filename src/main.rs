@@ -5,7 +5,7 @@ use std::process;
 fn match_pattern(input_line: &str, pattern: &str) -> bool {
     if pattern.chars().count() == 1 {
         return input_line.contains(pattern);
-    } else if pattern == "/d" {
+    } else if pattern == "\d" {
         return input_line.chars().any(|c| c.is_ascii_digit());
     } else {
         panic!("Unhandled pattern: {}", pattern)
@@ -17,16 +17,16 @@ fn main() {
     // You can use print statements as follows for debugging, they'll be visible when running tests.
     eprintln!("Logs from your program will appear here!");
 
-    if env::args().nth(1).unwrap() != "-E" {
+    if env::args().nth(1).expect("Expected first argument to be '-E'") != "-E" {
         println!("Expected first argument to be '-E'");
         process::exit(1);
     }
     eprintln!("-E check passed");
 
-    let pattern = env::args().nth(2).unwrap();
+    let pattern = env::args().nth(2).expect("Pattern not passed in properly");
     let mut input_line = String::new();
 
-    io::stdin().read_line(&mut input_line).unwrap();
+    io::stdin().read_line(&mut input_line).expect("Input line reading failed");
 
     // Uncomment this block to pass the first stage
     if match_pattern(&input_line, &pattern) {
