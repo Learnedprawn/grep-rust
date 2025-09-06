@@ -2,12 +2,25 @@ use std::env;
 use std::io;
 use std::process;
 
+trait WordClass {
+    fn is_alphanumeric_and_underscore(&self) -> bool;
+}
+impl WordClass for char {
+    fn is_alphanumeric_and_underscore(&self) -> bool {
+        self.is_ascii_alphanumeric() || self == &'_'
+    }
+}
+
 fn match_pattern(input_line: &str, pattern: &str) -> bool {
     eprintln!("Pattern: {}", pattern);
     if pattern.chars().count() == 1 {
-        return input_line.contains(pattern);
+        input_line.contains(pattern)
     } else if pattern == r"\d" {
-        return input_line.chars().any(|c| c.is_ascii_digit());
+        input_line.chars().any(|c| c.is_ascii_digit())
+    } else if pattern == r"\w" {
+        input_line
+            .chars()
+            .any(|c| c.is_alphanumeric_and_underscore())
     } else {
         panic!("Unhandled pattern: {}", pattern)
     }
@@ -18,7 +31,11 @@ fn main() {
     // You can use print statements as follows for debugging, they'll be visible when running tests.
     eprintln!("Logs from your program will appear here!");
 
-    if env::args().nth(1).expect("Expected first argument to be '-E'") != "-E" {
+    if env::args()
+        .nth(1)
+        .expect("Expected first argument to be '-E'")
+        != "-E"
+    {
         println!("Expected first argument to be '-E'");
         process::exit(1);
     }
@@ -26,7 +43,9 @@ fn main() {
     let pattern = env::args().nth(2).expect("Pattern not passed in properly");
     let mut input_line = String::new();
 
-    io::stdin().read_line(&mut input_line).expect("Input line reading failed");
+    io::stdin()
+        .read_line(&mut input_line)
+        .expect("Input line reading failed");
 
     // Uncomment this block to pass the first stage
     if match_pattern(&input_line, &pattern) {
