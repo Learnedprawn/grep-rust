@@ -28,7 +28,10 @@ fn match_pattern(input_line: &str, pattern: &str) -> bool {
             .expect("Char at index 1 error while parsing ^")
             == '^'
         {
+            println!("We are inside the negative group");
+
             let inner = pattern.trim_start_matches("[^").trim_end_matches(']');
+            println!("Inner: {}", inner);
             input_line.chars().any(|c| !inner.contains(c));
             // inner.chars().all(|c| )
 
