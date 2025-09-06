@@ -21,11 +21,11 @@ fn match_pattern(input_line: &str, pattern: &str) -> bool {
         input_line
             .chars()
             .any(|c| c.is_alphanumeric_and_underscore())
-    } else if pattern
-        .chars()
-        .nth(0)
-        .expect("pattern is not left square bracket")
-        == '['
+    } else if pattern.starts_with('[')
+    // .chars()
+    // .nth(0)
+    // .expect("pattern is not left square bracket")
+    // == '['
     // && pattern
     //     .chars()
     //     .last()
@@ -34,7 +34,11 @@ fn match_pattern(input_line: &str, pattern: &str) -> bool {
     {
         // let pattern_without_brackets = pattern[1..( pattern.len()-1 )];
         // input_line.chars().any(|c| c.)
-        let inner = &pattern[1..pattern.len() - 1];
+        let inner = pattern
+            .strip_prefix('[')
+            .and_then(|prefixless| prefixless.strip_suffix(']'))
+            .expect("Stripping brackets caused an issue");
+        // let inner = &pattern[1..pattern.len() - 1];
         // let mut pattern_iter = pattern.chars();
         // assert_eq!(pattern_iter.next().unwrap(), '[');
         for character in inner.chars() {
