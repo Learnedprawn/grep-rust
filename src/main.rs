@@ -72,6 +72,43 @@ fn match_pattern_charwise(input_line: &str, pattern: &str) -> bool {
                             return false;
                         }
                     }
+                } else if pattern_char == '[' {
+                    let char_after_square_bracket = pattern_iter
+                        .clone()
+                        .next()
+                        .expect("Square bracket next error");
+                    if char_after_square_bracket == '^' {
+                        pattern_iter.next().unwrap();
+                        let mut group = String::new();
+                        loop {
+                            match pattern_iter.next() {
+                                Some(']') => {
+                                    break;
+                                }
+                                Some(char) => {
+                                    group.push(char);
+                                }
+                                None => panic!("No matching ] found"),
+                            }
+                        }
+                        group.contains(input_char);
+                        return !group.chars().any(|c| input_line.contains(c));
+                    } else {
+                        let mut group = String::new();
+                        loop {
+                            match pattern_iter.next() {
+                                Some(']') => {
+                                    break;
+                                }
+                                Some(char) => {
+                                    group.push(char);
+                                }
+                                None => panic!("No matching ] found"),
+                            }
+                        }
+                        group.contains(input_char);
+                        return group.chars().any(|c| input_line.contains(c));
+                    }
                 } else {
                     if pattern_char != input_char {
                         println!("\\ not matched");
