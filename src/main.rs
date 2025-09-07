@@ -96,6 +96,19 @@ fn match_pattern_charwise(input_line: &str, pattern: &str) -> bool {
     }
 }
 
+fn pattern_len(pattern: &str) -> usize {
+    let mut length = 0;
+    let mut pattern_iter = pattern.chars();
+
+    while let Some(char) = pattern_iter.next() {
+        if char == '\\' {
+            pattern_iter.next();
+        }
+        length += 1;
+    }
+    length
+}
+
 // Usage: echo <input_text> | your_program.sh -E <pattern>
 fn main() {
     eprintln!("Logs from your program will appear here!");
@@ -110,7 +123,8 @@ fn main() {
     }
 
     let pattern = env::args().nth(2).expect("Pattern not passed in properly");
-    println!("pattern: {}, len: {}", pattern, pattern.len());
+    let pattern_len = pattern_len(&pattern);
+    println!("pattern: {}, len: {}", pattern, pattern_len);
     let mut input_line = String::new();
 
     io::stdin()
@@ -121,11 +135,24 @@ fn main() {
     let input_line = input_line.trim();
 
     println!("input_line: {}, len: {}", input_line, input_line.len());
-    if match_pattern_charwise(&input_line, &pattern) {
-        eprintln!("Match Pattern Called: process::exit(0)");
-        process::exit(0)
-    } else {
-        eprintln!("Match Pattern Called: process::exit(1)");
-        process::exit(1)
+
+    for i in 0..=(input_line.len() - pattern_len) {
+        let window = &input_line[i..i + pattern_len];
+        println!("Window: {}", window);
+        if match_pattern_charwise(&window, &pattern) {
+            eprintln!("Match Pattern Called: process::exit(0)");
+            process::exit(0)
+        } else {
+            eprintln!("Did not match");
+        }
     }
+    process::exit(1);
+
+    // if match_pattern_charwise(&input_line, &pattern) {
+    //     eprintln!("Match Pattern Called: process::exit(0)");
+    //     process::exit(0)
+    // } else {
+    //     eprintln!("Match Pattern Called: process::exit(1)");
+    //     process::exit(1)
+    // }
 }
