@@ -173,7 +173,7 @@ fn main() {
 
     let pattern_length;
     if pattern.chars().nth(0).unwrap() == '[' {
-        pattern_length = input_line.len() + 1;
+        pattern_length = input_line.len();
     } else {
         pattern_length = pattern_len(&pattern);
     }
