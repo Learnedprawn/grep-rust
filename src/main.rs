@@ -107,7 +107,7 @@ fn main() {
         .read_line(&mut input_line)
         .expect("Input line reading failed");
 
-    // newline removal
+    // Newline Removal
     let input_line = input_line.trim();
 
     println!("input_line: {}, len: {}", input_line, input_line.len());
