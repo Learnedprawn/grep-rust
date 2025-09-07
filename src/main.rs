@@ -54,13 +54,7 @@ fn match_pattern_charwise(input_line: &str, pattern: &str) -> bool {
         match (input_iter.next(), pattern_iter.next()) {
             (Some(input_char), Some(pattern_char)) => {
                 println!("input_char: {}, pattern_char: {}", input_char, pattern_char);
-                if pattern_char != '\\' {
-                    if pattern_char != input_char {
-                        println!("\\ not matched");
-                        println!("pattern_char: {}, input_char: {}", pattern_char, input_char);
-                        return false;
-                    }
-                } else {
+                if pattern_char == '\\' {
                     println!("\\ matched");
                     let class = pattern_iter.next().unwrap();
                     println!("class: {}", class);
@@ -77,6 +71,12 @@ fn match_pattern_charwise(input_line: &str, pattern: &str) -> bool {
                             println!("This is being called: w");
                             return false;
                         }
+                    }
+                } else {
+                    if pattern_char != input_char {
+                        println!("\\ not matched");
+                        println!("pattern_char: {}, input_char: {}", pattern_char, input_char);
+                        return false;
                     }
                 }
             }
