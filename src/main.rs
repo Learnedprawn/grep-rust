@@ -18,6 +18,13 @@ fn match_pattern(input_line: &str, pattern: &str) -> bool {
     } else if pattern == "\\d" {
         input_line.chars().any(|c| c.is_ascii_digit())
     } else if pattern == "\\w" {
+        println!(
+            "Input_line: {}, Output: {}",
+            input_line,
+            input_line
+                .chars()
+                .any(|c| c.is_alphanumeric_and_underscore())
+        );
         input_line
             .chars()
             .any(|c| c.is_alphanumeric_and_underscore())
@@ -46,22 +53,27 @@ fn match_pattern_charwise(input_line: &str, pattern: &str) -> bool {
     loop {
         match (input_iter.next(), pattern_iter.next()) {
             (Some(input_char), Some(pattern_char)) => {
-                println!("Was this not called even once or is this a last char error?");
+                println!("input_char: {}, pattern_char: {}", input_char, pattern_char);
                 if pattern_char != '\\' {
                     if pattern_char != input_char {
-                        println!("This is being called");
+                        println!("\\ not matched");
                         println!("pattern_char: {}, input_char: {}", pattern_char, input_char);
                         return false;
                     }
                 } else {
-                    if pattern_iter.next().expect("Value after \\ weird") == 'd' {
-                        if !match_pattern(pattern_char.to_string().as_str(), "\\d") {
+                    println!("\\ matched");
+                    let class = pattern_iter.next().unwrap();
+                    println!("class: {}", class);
+                    // if pattern_iter.next().expect("Value after \\ weird") == 'd' {
+                    if class == 'd' {
+                        if !match_pattern(input_char.to_string().as_str(), "\\d") {
                             println!("This is being called: d");
                             return false;
                         }
                     }
-                    if pattern_iter.next().expect("Value after \\ weird") == 'w' {
-                        if !match_pattern(pattern_char.to_string().as_str(), "\\w") {
+                    // if pattern_iter.next().expect("Value after \\ weird") == 'w' {
+                    if class == 'w' {
+                        if !match_pattern(input_char.to_string().as_str(), "\\w") {
                             println!("This is being called: w");
                             return false;
                         }
@@ -71,7 +83,6 @@ fn match_pattern_charwise(input_line: &str, pattern: &str) -> bool {
             (None, None) => return true,
             (Some(input_char), None) => {
                 println!("pattern_char is none and input_char: {}", input_char);
-
                 return false;
             }
             (None, Some(pattern_char)) => {
@@ -87,7 +98,6 @@ fn match_pattern_charwise(input_line: &str, pattern: &str) -> bool {
 
 // Usage: echo <input_text> | your_program.sh -E <pattern>
 fn main() {
-    // You can use print statements as follows for debugging, they'll be visible when running tests.
     eprintln!("Logs from your program will appear here!");
 
     if env::args()
@@ -111,7 +121,6 @@ fn main() {
     let input_line = input_line.trim();
 
     println!("input_line: {}, len: {}", input_line, input_line.len());
-    // Uncomment this block to pass the first stage
     if match_pattern_charwise(&input_line, &pattern) {
         eprintln!("Match Pattern Called: process::exit(0)");
         process::exit(0)
