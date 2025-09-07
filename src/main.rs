@@ -182,6 +182,7 @@ fn main() {
 
     println!("input_line: {}, len: {}", input_line, input_line.len());
 
+    //byte counting try
     let mut byte_count = 0;
     loop {
         if byte_count >= input_line.len() - pattern_length {
