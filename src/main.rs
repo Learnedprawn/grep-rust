@@ -91,8 +91,8 @@ fn match_pattern_charwise(input_line: &str, pattern: &str) -> bool {
                                 None => panic!("No matching ] found"),
                             }
                         }
-                        group.contains(input_char);
-                        return !group.chars().any(|c| input_line.contains(c));
+                        println!("Output: {}", !group.chars().any(|c| input_line.contains(c)));
+                        return group.chars().any(|c| input_line.contains(c));
                     } else {
                         let mut group = String::new();
                         loop {
@@ -135,6 +135,7 @@ fn match_pattern_charwise(input_line: &str, pattern: &str) -> bool {
 
 fn pattern_len(pattern: &str) -> usize {
     let mut length = 0;
+    let pattern = pattern.trim_start_matches('[').trim_end_matches(']');
     let mut pattern_iter = pattern.chars();
 
     while let Some(char) = pattern_iter.next() {
@@ -183,7 +184,8 @@ fn main() {
             eprintln!("Did not match");
         }
     }
-    process::exit(1);
+    eprintln!("Match Pattern Called: process::exit(1)");
+    process::exit(1)
 
     // if match_pattern_charwise(&input_line, &pattern) {
     //     eprintln!("Match Pattern Called: process::exit(0)");
