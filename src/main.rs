@@ -161,8 +161,7 @@ fn main() {
     }
 
     let pattern = env::args().nth(2).expect("Pattern not passed in properly");
-    let pattern_len = pattern_len(&pattern);
-    println!("pattern: {}, len: {}", pattern, pattern_len);
+
     let mut input_line = String::new();
 
     io::stdin()
@@ -172,10 +171,19 @@ fn main() {
     // Newline Removal
     let input_line = input_line.trim();
 
+    let pattern_length;
+    if pattern.chars().nth(0).unwrap() == '[' {
+        pattern_length = input_line.len() + 1;
+    } else {
+        pattern_length = pattern_len(&pattern);
+    }
+
+    println!("pattern: {}, len: {}", pattern, pattern_length);
+
     println!("input_line: {}, len: {}", input_line, input_line.len());
 
-    for i in 0..=(input_line.len() - pattern_len) {
-        let window = &input_line[i..i + pattern_len];
+    for i in 0..=(input_line.len() - pattern_length) {
+        let window = &input_line[i..i + pattern_length];
         println!("Window: {}", window);
         if match_pattern_charwise(&window, &pattern) {
             eprintln!("Match Pattern Called: process::exit(0)");
