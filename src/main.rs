@@ -182,16 +182,36 @@ fn main() {
 
     println!("input_line: {}, len: {}", input_line, input_line.len());
 
-    for i in 0..=(input_line.len() - pattern_length) {
-        let window = &input_line[i..i + pattern_length];
-        println!("Window: {}", window);
-        if match_pattern_charwise(&window, &pattern) {
-            eprintln!("Match Pattern Called: process::exit(0)");
-            process::exit(0)
-        } else {
-            eprintln!("Did not match");
+    let mut byte_count = 0;
+    loop {
+        if byte_count >= input_line.len() - pattern_length {
+            break;
+        }
+        match input_line.chars().next() {
+            Some(character) => {
+                let char_bytes = character.len_utf8();
+                let window = &input_line[byte_count..byte_count + pattern_length];
+                if match_pattern_charwise(&window, &pattern) {
+                    eprintln!("Match Pattern Called: process::exit(0)");
+                    process::exit(0)
+                } else {
+                    eprintln!("Did not match");
+                }
+                byte_count += char_bytes;
+            }
+            None => break,
         }
     }
+    // for i in 0..=(input_line.len() - pattern_length) {
+    //     let window = &input_line[i..i + pattern_length];
+    //     println!("Window: {}", window);
+    //     if match_pattern_charwise(&window, &pattern) {
+    //         eprintln!("Match Pattern Called: process::exit(0)");
+    //         process::exit(0)
+    //     } else {
+    //         eprintln!("Did not match");
+    //     }
+    // }
     eprintln!("Match Pattern Called: process::exit(1)");
     process::exit(1)
 
