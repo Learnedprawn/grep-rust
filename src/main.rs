@@ -92,7 +92,7 @@ fn match_pattern_charwise(input_line: &str, pattern: &str) -> bool {
                             }
                         }
                         println!("Output: {}", !group.chars().any(|c| input_line.contains(c)));
-                        return !group.chars().any(|c| input_line.contains(c));
+                        return !input_line.chars().all(|c| group.contains(c));
                     } else {
                         let mut group = String::new();
                         loop {
