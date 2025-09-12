@@ -47,6 +47,7 @@ fn parse_one_subpattern(s: &str) -> Result<Option<SubPattern>, String> {
     Ok(Some(sub_pattern))
 }
 
+//parse one subpattern to this
 fn match_pattern(input_line: &str, pattern: &str) -> bool {
     if pattern.chars().count() == 1 {
         return input_line.contains(pattern);
