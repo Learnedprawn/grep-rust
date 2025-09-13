@@ -14,6 +14,18 @@ struct Pattern {
     pattern: Vec<SubPattern>,
 }
 
+impl Pattern {
+    pub fn from_str(s: &str) -> Self {
+        let mut pattern: Vec<SubPattern> = vec![];
+
+        while let Some(subpattern) = parse_one_subpattern(s).unwrap() {
+            pattern.push(subpattern);
+        }
+
+        Pattern { pattern }
+    }
+}
+
 fn parse_one_subpattern(s: &str) -> Result<Option<SubPattern>, String> {
     let mut s_iter = s.chars();
 
