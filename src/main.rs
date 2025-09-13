@@ -1,6 +1,7 @@
 use std::env;
 use std::io;
 use std::process;
+use std::str::FromStr;
 
 enum SubPattern {
     Character(char),
@@ -14,15 +15,16 @@ struct Pattern {
     pattern: Vec<SubPattern>,
 }
 
-impl Pattern {
-    pub fn from_str(s: &str) -> Self {
+impl FromStr for Pattern {
+    type Err = String;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
         let mut pattern: Vec<SubPattern> = vec![];
 
-        while let Some(subpattern) = parse_one_subpattern(s).unwrap() {
+        while let Some(subpattern) = parse_one_subpattern(s)? {
             pattern.push(subpattern);
         }
 
-        Pattern { pattern }
+        Ok(Self { pattern })
     }
 }
 
@@ -61,6 +63,7 @@ fn parse_one_subpattern(s: &str) -> Result<Option<SubPattern>, String> {
 
 //parse one subpattern to this
 fn match_pattern(input_line: &str, pattern: &str) -> bool {
+    let parsed_pattern: Pattern = pattern.parse().expect("Error in pattern parsing");
     if pattern.chars().count() == 1 {
         return input_line.contains(pattern);
     } else {
